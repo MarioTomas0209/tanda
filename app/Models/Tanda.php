@@ -15,11 +15,13 @@ class Tanda extends Model
         'frequency',
         'start_date',
         'status',
+        'completed_at',
     ];
 
     protected $casts = [
         'amount' => 'decimal:2',
         'start_date' => 'date',
+        'completed_at' => 'datetime',
     ];
 
     // Relaciones
