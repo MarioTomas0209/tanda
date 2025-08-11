@@ -4,6 +4,7 @@ import { Link, usePage, router } from '@inertiajs/react';
 import { Home, Users, History, Settings, User, Lock, Palette, LogOut } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
+import { colorClasses } from '@/lib/colors';
 
 interface MobileNavigationProps {
     mainItems: NavItem[];
@@ -38,11 +39,23 @@ export function MobileNavigation({ mainItems, settingsItems }: MobileNavigationP
     return (
         <>
             {/* Navegación principal */}
-            <div className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 lg:hidden">
+            <div className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-indigo-200 dark:border-indigo-800 lg:hidden">
                 <div className="flex items-center justify-around p-2">
                     {allItems.map((item) => {
                         const Icon = getIconForRoute(item.href);
-                        const isActive = currentPath.startsWith(item.href);
+                        // Lógica mejorada para detectar rutas activas
+                        let isActive = false;
+                        
+                        if (item.href === '/tandas' && currentPath === '/tandas') {
+                            // Solo activo si es exactamente /tandas (no /tandas/historial)
+                            isActive = true;
+                        } else if (item.href === '/tandas/historial' && currentPath.startsWith('/tandas/historial')) {
+                            // Activo para historial y subrutas
+                            isActive = true;
+                        } else if (item.href !== '/tandas' && currentPath.startsWith(item.href)) {
+                            // Para otras rutas, usar startsWith pero excluir /tandas
+                            isActive = true;
+                        }
                         
                         return (
                             <Link key={item.href} href={item.href} className="flex-1">
@@ -51,8 +64,8 @@ export function MobileNavigation({ mainItems, settingsItems }: MobileNavigationP
                                     size="sm"
                                     className={`w-full flex-col h-auto py-2 px-1 ${
                                         isActive 
-                                            ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/20' 
-                                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
+                                            ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/20' 
+                                            : 'text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/20'
                                     }`}
                                 >
                                     <Icon className="h-5 w-5 mb-1" />
@@ -65,7 +78,7 @@ export function MobileNavigation({ mainItems, settingsItems }: MobileNavigationP
             </div>
 
             {/* Botón de logout flotante */}
-            <div className="fixed bottom-20 right-4 z-50 lg:hidden">
+            {/* <div className="fixed bottom-20 right-4 z-50 lg:hidden">
                 <Button
                     variant="destructive"
                     size="sm"
@@ -75,7 +88,7 @@ export function MobileNavigation({ mainItems, settingsItems }: MobileNavigationP
                     <LogOut className="h-5 w-5" />
                     <span className="sr-only">Cerrar Sesión</span>
                 </Button>
-            </div>
+            </div> */}
         </>
     );
 }

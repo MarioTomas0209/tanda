@@ -1,0 +1,65 @@
+/* Estilos personalizados para el sidebar con la nueva paleta de colores */
+
+/* Variables CSS personalizadas para el sidebar */
+:root {
+  --sidebar-accent: 79 70 229; /* indigo-600 */
+  --sidebar-accent-foreground: 255 255 255; /* white */
+  --sidebar-accent-hover: 67 56 202; /* indigo-700 */
+  --sidebar-accent-hover-foreground: 255 255 255; /* white */
+}
+
+/* Estilos para el estado activo del sidebar */
+[data-active="true"] {
+  background-color: rgb(var(--sidebar-accent) / 0.1) !important;
+  color: rgb(var(--sidebar-accent)) !important;
+  font-weight: 600 !important;
+}
+
+[data-active="true"]:hover {
+  background-color: rgb(var(--sidebar-accent) / 0.15) !important;
+}
+
+/* Estilos para hover del sidebar */
+.sidebar-menu-button:hover {
+  background-color: rgb(var(--sidebar-accent) / 0.05) !important;
+  color: rgb(var(--sidebar-accent)) !important;
+}
+
+/* Estilos para el grupo activo */
+.sidebar-group[data-active="true"] .sidebar-menu-button {
+  background-color: rgb(var(--sidebar-accent) / 0.1) !important;
+  color: rgb(var(--sidebar-accent)) !important;
+}
+
+/* Estilos para el logo del sidebar */
+.sidebar-header .sidebar-menu-button:hover {
+  background-color: rgb(var(--sidebar-accent) / 0.05) !important;
+}
+
+/* Estilos para el footer del sidebar */
+.sidebar-footer .sidebar-menu-button:hover {
+  background-color: rgb(var(--sidebar-accent) / 0.05) !important;
+  color: rgb(var(--sidebar-accent)) !important;
+}
+
+/* Modo oscuro */
+.dark {
+  --sidebar-accent: 129 140 248; /* indigo-400 */
+  --sidebar-accent-foreground: 255 255 255; /* white */
+  --sidebar-accent-hover: 165 180 252; /* indigo-300 */
+  --sidebar-accent-hover-foreground: 15 23 42; /* slate-900 */
+}
+
+.dark [data-active="true"] {
+  background-color: rgb(var(--sidebar-accent) / 0.2) !important;
+  color: rgb(var(--sidebar-accent)) !important;
+}
+
+.dark [data-active="true"]:hover {
+  background-color: rgb(var(--sidebar-accent) / 0.25) !important;
+}
+
+.dark .sidebar-menu-button:hover {
+  background-color: rgb(var(--sidebar-accent) / 0.1) !important;
+  color: rgb(var(--sidebar-accent)) !important;
+}

@@ -14,7 +14,7 @@ export default function AppSidebarLayout({ children, breadcrumbs = [] }: PropsWi
             <AppSidebar />
             <AppContent 
                 variant="sidebar" 
-                className={`overflow-x-hidden ${isMobile ? 'pb-20' : ''}`}
+                className={`overflow-x-hidden ${isMobile ? 'pt-0 pb-20' : ''}`}
             >
                 <AppSidebarHeader breadcrumbs={breadcrumbs} />
                 {children}

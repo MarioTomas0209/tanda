@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ArrowLeft, Info, Calendar, DollarSign, Settings } from 'lucide-react';
+import { colorClasses } from '@/lib/colors';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -51,39 +52,45 @@ export default function Edit({ tanda }: Props) {
             <Head title={`Editar: ${tanda.name}`} />
 
             <div className="max-w-2xl mx-auto space-y-4 p-4 md:space-y-6 md:p-6">
-                {/* Header */}
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:space-x-4">
-                    <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => window.history.back()}
-                        className="w-full sm:w-auto h-11"
-                    >
-                        <ArrowLeft className="w-4 h-4 mr-2" />
-                        Volver
-                    </Button>
-                    <div className="text-center sm:text-left">
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 md:text-3xl">
-                            Editar Tanda
-                        </h1>
-                        <p className="text-gray-600 dark:text-gray-400">
-                            Modifica los detalles de tu tanda
-                        </p>
+                {/* Header mejorado para móviles */}
+                <div className="flex flex-col gap-4">
+                    {/* Primera fila: Botón volver y título */}
+                    <div className="flex items-center justify-between">
+                        <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={() => window.history.back()}
+                            className="h-10 w-10 p-0 border-indigo-600 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/20"
+                        >
+                            <ArrowLeft className="w-4 h-4" />
+                        </Button>
+                        
+                        <div className="flex-1 text-center px-4">
+                            <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 md:text-2xl lg:text-3xl">
+                                Editar Tanda
+                            </h1>
+                            <p className="text-gray-600 dark:text-gray-400 text-sm md:text-base mt-1">
+                                Modifica los detalles de tu tanda
+                            </p>
+                        </div>
+
+                        {/* Espaciador para mantener el título centrado */}
+                        <div className="w-10"></div>
                     </div>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
-                    <Card className="border-gray-200 dark:border-gray-700">
-                        <CardHeader className="pb-4">
-                            <CardTitle className="flex items-center gap-2 text-lg">
-                                <Info className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                    <div className="rounded-lg bg-gradient-to-br from-indigo-50 to-violet-50 dark:from-indigo-950/20 dark:to-violet-950/20 border border-indigo-200 dark:border-indigo-700 p-4">
+                        <div className="mb-4">
+                            <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                <Info className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                                 Información de la Tanda
-                            </CardTitle>
-                            <CardDescription className="text-gray-600 dark:text-gray-400">
+                            </h3>
+                            <p className="text-gray-600 dark:text-gray-400">
                                 Modifica los detalles básicos de tu tanda
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
+                            </p>
+                        </div>
+                        <div className="space-y-4">
                             <div className="grid grid-cols-1 gap-4">
                                 <div>
                                     <Label htmlFor="name" className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -178,10 +185,10 @@ export default function Edit({ tanda }: Props) {
                                 </div>
 
                                 {/* Información adicional */}
-                                <div className="p-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                                <div className="p-4 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-teal-950/20 border border-emerald-200 dark:border-emerald-700 rounded-lg">
                                     <div className="flex items-start gap-3">
-                                        <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                                        <div className="text-sm text-blue-800 dark:text-blue-200">
+                                        <Info className="h-5 w-5 text-emerald-600 dark:text-emerald-400 mt-0.5 flex-shrink-0" />
+                                        <div className="text-sm text-emerald-800 dark:text-emerald-200">
                                             <p className="font-medium mb-1">💡 Cambios importantes:</p>
                                             <p>
                                                 Al cambiar la frecuencia o fecha de inicio, se recalcularán automáticamente 
@@ -191,8 +198,8 @@ export default function Edit({ tanda }: Props) {
                                     </div>
                                 </div>
                             </div>
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </div>
 
                     {/* Botones de acción */}
                     <div className="flex flex-col gap-3 sm:flex-row sm:justify-end sm:space-x-4 pt-4">
@@ -200,14 +207,14 @@ export default function Edit({ tanda }: Props) {
                             type="button"
                             variant="outline"
                             onClick={() => window.history.back()}
-                            className="w-full sm:w-auto h-11"
+                            className="w-full sm:w-auto h-11 border-indigo-600 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/20"
                         >
                             Cancelar
                         </Button>
                         <Button 
                             type="submit" 
                             disabled={processing}
-                            className="w-full sm:w-auto h-11 bg-blue-600 hover:bg-blue-700"
+                            className={`w-full sm:w-auto h-11 ${colorClasses.button.primary}`}
                         >
                             {processing ? 'Guardando...' : 'Guardar Cambios'}
                         </Button>

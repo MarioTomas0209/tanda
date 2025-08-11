@@ -3,7 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
+import { LogOut } from 'lucide-react';
 import { type PropsWithChildren } from 'react';
 
 const sidebarNavItems: NavItem[] = [
@@ -32,9 +33,13 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
 
     const currentPath = window.location.pathname;
 
+    const handleLogout = () => {
+        router.post('/logout');
+    };
+
     return (
         <div className="px-4 py-6">
-            <Heading title="Settings" description="Manage your profile and account settings" />
+            <Heading title="Configuración" description="Gestiona tu cuenta y preferencias" />
 
             <div className="flex flex-col space-y-8 lg:flex-row lg:space-y-0 lg:space-x-12">
                 <aside className="w-full max-w-xl lg:w-48">
@@ -54,6 +59,17 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                                 </Link>
                             </Button>
                         ))}
+                        
+                        {/* Botón de Salir separado */}
+                        <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={handleLogout}
+                            className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950/20"
+                        >
+                            <LogOut className="mr-2 h-4 w-4" />
+                            Salir
+                        </Button>
                     </nav>
                 </aside>
 

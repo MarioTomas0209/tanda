@@ -5,7 +5,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ArrowLeft, Users, Calendar, DollarSign, CheckCircle, Clock, AlertCircle, Copy } from 'lucide-react';
+import { ArrowLeft, Users, Calendar, DollarSign, CheckCircle, Clock, AlertCircle, Copy, Edit, MoreHorizontal, Trash2, Eye } from 'lucide-react';
+import { useState } from 'react';
+import { colorClasses } from '@/lib/colors';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -99,6 +108,8 @@ const paymentStatusIcons = {
 
 export default function Show({ tanda, stats }: Props) {
     const { post, processing } = useForm();
+    const [currentRound, setCurrentRound] = useState(1);
+    const [showCompletedPayments, setShowCompletedPayments] = useState(false);
 
     const markAsPaid = (paymentId: number) => {
         post(`/tandas/${tanda.id}/payments/${paymentId}/mark-as-paid`, {
@@ -150,19 +161,19 @@ export default function Show({ tanda, stats }: Props) {
     const totalPaidPayments = stats.paid_payments;
     const totalParticipants = tanda.participants.length;
     let currentPosition;
-    let currentRound;
+    let currentRoundNumber;
     
     if (totalPaidPayments === 0) {
         currentPosition = 1; // Si no hay pagos, el primer participante cobra
-        currentRound = 1;
+        currentRoundNumber = 1;
     } else {
         // El cobrador cambia después de que TODOS los participantes paguen
         // Cada ronda tiene N pagos (uno por participante)
-        const currentRoundNumber = Math.floor(totalPaidPayments / totalParticipants);
+        currentRoundNumber = Math.floor(totalPaidPayments / totalParticipants);
         currentPosition = (currentRoundNumber % totalParticipants) + 1;
         
         // Calcular la ronda actual para mostrar
-        currentRound = currentRoundNumber + 1;
+        // currentRoundNumber ya tiene el valor correcto
     }
     
     const nextCollector = tanda.participants.find(p => p.position === currentPosition);
@@ -172,36 +183,80 @@ export default function Show({ tanda, stats }: Props) {
             <Head title={`Tanda: ${tanda.name}`} />
 
             <div className="space-y-4 p-4 md:space-y-6 md:p-6">
-                {/* Header */}
-                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:space-x-4">
-                    <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => window.history.back()}
-                        className="w-full lg:w-auto h-11"
-                    >
-                        <ArrowLeft className="w-4 h-4 mr-2" />
-                        Volver
-                    </Button>
-                    <div className="flex-1 text-center lg:text-left">
-                        <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:space-x-3">
-                            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 md:text-3xl">{tanda.name}</h1>
+                {/* Header mejorado para móviles */}
+                <div className="flex flex-col gap-4">
+                    {/* Primera fila: Botón volver y título */}
+                    <div className="flex items-center justify-between">
+                        <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={() => window.history.back()}
+                            className="h-10 w-10 p-0 border-indigo-600 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/20"
+                        >
+                            <ArrowLeft className="w-4 h-4" />
+                        </Button>
+                        
+                        <div className="flex-1 text-center px-4">
+                            <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 md:text-2xl lg:text-3xl truncate">
+                                {tanda.name}
+                            </h1>
+                        </div>
+
+                        {/* Menú de 3 puntos para móviles */}
+                        <div className="md:hidden">
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline" size="sm" className="h-10 w-10 p-0 border-indigo-600 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/20">
+                                        <MoreHorizontal className="w-4 h-4" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="w-48">
+                                    <DropdownMenuItem asChild>
+                                        <Link href={`/tandas/${tanda.id}/edit`} className="flex items-center">
+                                            <Edit className="w-4 h-4 mr-2" />
+                                            Editar Tanda
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild>
+                                        <Link href={`/tandas/${tanda.id}/duplicate`} className="flex items-center">
+                                            <Copy className="w-4 h-4 mr-2" />
+                                            Duplicar Tanda
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem asChild>
+                                        <Link href={`/tandas/${tanda.id}`} className="flex items-center">
+                                            <Eye className="w-4 h-4 mr-2" />
+                                            Ver Detalles
+                                        </Link>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
+                    </div>
+
+                    {/* Segunda fila: Badge de estado y descripción */}
+                    <div className="text-center">
+                        <div className="flex justify-center mb-2">
                             <Badge className={`${statusColors[tanda.status]} dark:bg-opacity-20`}>
                                 {statusLabels[tanda.status]}
                             </Badge>
                         </div>
                         <p className="text-gray-600 dark:text-gray-400 text-sm md:text-base">
-                            {frequencyLabels[tanda.frequency]} • ${Number(tanda.amount).toFixed(2)} por pago • Ronda {currentRound}
+                            {frequencyLabels[tanda.frequency]} • ${Number(tanda.amount).toFixed(2)} por pago • Ronda {currentRoundNumber}
                         </p>
                     </div>
-                    <div className="flex flex-col gap-2 sm:flex-row sm:space-x-2">
-                        <Link href={`/tandas/${tanda.id}/edit`} className="w-full sm:w-auto">
-                            <Button variant="outline" className="w-full sm:w-auto h-11">
+
+                    {/* Botones de acción solo en desktop */}
+                    <div className="hidden md:flex gap-3 justify-center">
+                        <Link href={`/tandas/${tanda.id}/edit`}>
+                            <Button variant="outline" className="h-11 border-indigo-600 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/20">
+                                <Edit className="w-4 h-4 mr-2" />
                                 Editar Tanda
                             </Button>
                         </Link>
-                        <Link href={`/tandas/${tanda.id}/duplicate`} className="w-full sm:w-auto">
-                            <Button variant="outline" className="w-full sm:w-auto h-11">
+                        <Link href={`/tandas/${tanda.id}/duplicate`}>
+                            <Button variant="outline" className="h-11 border-indigo-600 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/20">
                                 <Copy className="w-4 h-4 mr-2" />
                                 Duplicar
                             </Button>

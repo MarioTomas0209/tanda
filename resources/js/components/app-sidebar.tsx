@@ -5,12 +5,13 @@ import { MobileNavigation } from '@/components/mobile-navigation';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Users, Settings, History, Cog } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, Users, Settings, History, Cog, HelpCircle, LogOut } from 'lucide-react';
 import AppLogo from './app-logo';
+import './ui/sidebar-custom.css';
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
+        title: 'Inicio',
         href: '/dashboard',
         icon: LayoutGrid,
     },
@@ -32,16 +33,16 @@ const settingsNavItems: NavItem[] = [
         href: '/settings/profile',
         icon: Settings,
     },
-    {
-        title: 'Contraseña',
-        href: '/settings/password',
-        icon: Cog,
-    },
-    {
-        title: 'Apariencia',
-        href: '/settings/appearance',
-        icon: Settings,
-    },
+    // {
+    //     title: 'Contraseña',
+    //     href: '/settings/password',
+    //     icon: Cog,
+    // },
+    // {
+    //     title: 'Apariencia',
+    //     href: '/settings/appearance',
+    //     icon: Settings,
+    // },
 ];
 
 const footerNavItems: NavItem[] = [
@@ -78,10 +79,10 @@ export function AppSidebar() {
                     <NavMain items={settingsNavItems} title="Configuración" />
                 </SidebarContent>
 
-                <SidebarFooter>
+                {/* <SidebarFooter>
                     <NavFooter items={footerNavItems} className="mt-auto" />
                     <NavUser />
-                </SidebarFooter>
+                </SidebarFooter> */}
             </Sidebar>
             
             {/* Navegación móvil en la parte inferior */}

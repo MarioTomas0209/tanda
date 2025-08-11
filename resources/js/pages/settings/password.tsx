@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Lock, Shield, Key } from 'lucide-react';
+import { colorClasses } from '@/lib/colors';
 
 export default function Password() {
     const passwordInput = useRef<HTMLInputElement>(null);
@@ -57,17 +58,15 @@ export default function Password() {
                     </div>
 
                     <form onSubmit={updatePassword} className="space-y-6">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="text-lg flex items-center gap-2">
-                                    <Lock className="h-5 w-5 text-blue-600" />
+                        <div className="rounded-lg bg-gradient-to-br from-indigo-50 to-violet-50 dark:from-indigo-950/20 dark:to-violet-950/20 border border-indigo-200 dark:border-indigo-700 p-4">
+                            <div className="mb-4">
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                                    <Lock className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                                     Cambio de Contraseña
-                                </CardTitle>
-                                <CardDescription>
-                                    Ingresa tu contraseña actual y la nueva contraseña deseada
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
+                                </h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">Ingresa tu contraseña actual y la nueva contraseña deseada</p>
+                            </div>
+                            <div className="space-y-4">
                                 <div className="grid gap-3">
                                     <Label htmlFor="current_password" className="text-sm font-medium flex items-center gap-2">
                                         <Key className="h-4 w-4" />
@@ -120,31 +119,31 @@ export default function Password() {
                                     />
                                     <InputError message={errors.password_confirmation} />
                                 </div>
-                            </CardContent>
-                        </Card>
+                            </div>
+                        </div>
 
                         {/* Consejos de seguridad */}
-                        <Card className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/20">
-                            <CardContent className="pt-6">
+                        <div className="rounded-lg bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-teal-950/20 border border-emerald-200 dark:border-emerald-700 p-4">
+                            <div className="pt-6">
                                 <div className="space-y-3">
-                                    <h4 className="font-medium text-blue-900 dark:text-blue-100">
+                                    <h4 className="font-medium text-emerald-900 dark:text-emerald-100">
                                         Consejos para una contraseña segura:
                                     </h4>
-                                    <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+                                    <ul className="text-sm text-emerald-800 dark:text-emerald-200 space-y-1">
                                         <li>• Usa al menos 8 caracteres</li>
                                         <li>• Combina letras mayúsculas y minúsculas</li>
                                         <li>• Incluye números y símbolos</li>
                                         <li>• Evita información personal fácil de adivinar</li>
                                     </ul>
                                 </div>
-                            </CardContent>
-                        </Card>
+                            </div>
+                        </div>
 
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             <Button 
                                 type="submit" 
                                 disabled={processing}
-                                className="w-full sm:w-auto"
+                                className={`w-full sm:w-auto ${colorClasses.button.primary}`}
                             >
                                 {processing ? 'Actualizando...' : 'Actualizar Contraseña'}
                             </Button>
@@ -156,7 +155,7 @@ export default function Password() {
                                 leave="transition ease-in-out"
                                 leaveTo="opacity-0"
                             >
-                                <p className="text-sm text-green-600 dark:text-green-400 font-medium">
+                                <p className="text-sm text-emerald-600 dark:text-emerald-400 font-medium">
                                     ¡Contraseña actualizada exitosamente!
                                 </p>
                             </Transition>

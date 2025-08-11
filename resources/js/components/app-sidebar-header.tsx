@@ -20,30 +20,24 @@ export function AppSidebarHeader({ breadcrumbs = [] }: AppSidebarHeaderProps) {
         }
     };
 
+    // Ocultar completamente el header en móviles
+    if (isMobile) {
+        return null;
+    }
+
     return (
         <div className="flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4">
-            {isMobile && (
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    className="lg:hidden"
-                    onClick={toggleSidebar}
-                >
-                    {isMobile ? (openMobile ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />) : (open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />)}
-                </Button>
-            )}
+            <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleSidebar}
+            >
+                {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            </Button>
             
             <div className="flex-1">
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
             </div>
-            
-            {isMobile && (
-                <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="sm" className="lg:hidden">
-                        <span className="sr-only">Menú</span>
-                    </Button>
-                </div>
-            )}
         </div>
     );
 }

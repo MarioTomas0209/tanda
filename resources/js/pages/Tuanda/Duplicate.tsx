@@ -2,7 +2,6 @@ import { Head, useForm } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -10,117 +9,77 @@ import { ArrowLeft, Copy, Plus, Trash2, GripVertical, Shuffle, Info } from 'luci
 import { useState } from 'react';
 import { colorClasses } from '@/lib/colors';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-    },
-    {
-        title: 'Mis Tandas',
-        href: '/tandas',
-    },
-    {
-        title: 'Historial',
-        href: '/tandas/historial',
-    },
-    {
-        title: 'Duplicar Tanda',
-        href: '#',
-    },
-];
-
-interface Participant {
-    name: string;
-    email: string;
-    phone: string;
-    [key: string]: string;
-}
-
-interface OriginalTanda {
-    id: number;
-    name: string;
-    amount: number;
-    frequency: 'weekly' | 'biweekly' | 'monthly';
-    start_date: string;
-    participants: {
-        name: string;
-        email: string | null;
-        phone: string | null;
-    }[];
-}
-
 interface Props {
-    originalTanda: OriginalTanda;
+    originalTanda: {
+        id: number;
+        name: string;
+        amount: number;
+        frequency: 'weekly' | 'biweekly' | 'monthly';
+        participants: {
+            id: number;
+            name: string;
+            email: string;
+            phone: string;
+        }[];
+        start_date: string;
+    };
 }
-
-const frequencyLabels = {
-    weekly: 'Semanal',
-    biweekly: 'Quincenal',
-    monthly: 'Mensual',
-};
 
 export default function Duplicate({ originalTanda }: Props) {
-    const [participants, setParticipants] = useState<Participant[]>(
-        originalTanda.participants.map(p => ({
-            name: p.name,
-            email: p.email || '',
-            phone: p.phone || '',
-        }))
-    );
-
+    const [participants, setParticipants] = useState(originalTanda.participants);
     const { data, setData, post, processing, errors } = useForm({
-        name: `${originalTanda.name} (Copia)`,
-        amount: originalTanda.amount.toString(),
+        name: originalTanda.name,
+        amount: originalTanda.amount,
         frequency: originalTanda.frequency,
-        start_date: new Date().toISOString().split('T')[0], // Hoy
-        participants: participants,
+        start_date: originalTanda.start_date,
+        participants: participants.map(p => ({
+            id: p.id,
+            name: p.name,
+            email: p.email,
+            phone: p.phone,
+        })),
     });
 
-    const addParticipant = () => {
-        setParticipants([...participants, { name: '', email: '', phone: '' }]);
-    };
-
-    const removeParticipant = (index: number) => {
-        if (participants.length > 2) {
-            const newParticipants = participants.filter((_, i) => i !== index);
-            setParticipants(newParticipants);
-            setData('participants', newParticipants);
-        }
-    };
-
-    const moveParticipant = (fromIndex: number, toIndex: number) => {
-        if (toIndex < 0 || toIndex >= participants.length) return;
-        
-        const newParticipants = [...participants];
-        const [movedParticipant] = newParticipants.splice(fromIndex, 1);
-        newParticipants.splice(toIndex, 0, movedParticipant);
-        
-        setParticipants(newParticipants);
-        setData('participants', newParticipants);
-    };
-
-    const shuffleParticipants = () => {
-        const shuffled = [...participants];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        setParticipants(shuffled);
-        setData('participants', shuffled);
-    };
-
-    const updateParticipant = (index: number, field: keyof Participant, value: string) => {
-        const newParticipants = participants.map((participant, i) => 
-            i === index ? { ...participant, [field]: value } : participant
-        );
-        setParticipants(newParticipants);
-        setData('participants', newParticipants);
+    const frequencyLabels: { [key: string]: string } = {
+        weekly: 'Semanal',
+        biweekly: 'Quincenal',
+        monthly: 'Mensual',
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post('/tandas');
+        post(route('tandas.store'));
     };
+
+    const addParticipant = () => {
+        setParticipants(prev => [...prev, { id: 0, name: '', email: '', phone: '' }]);
+    };
+
+    const updateParticipant = (index: number, field: 'name' | 'email' | 'phone', value: string) => {
+        setParticipants(prev => prev.map((p, i) => i === index ? { ...p, [field]: value } : p));
+    };
+
+    const removeParticipant = (index: number) => {
+        setParticipants(prev => prev.filter((_, i) => i !== index));
+    };
+
+    const moveParticipant = (fromIndex: number, toIndex: number) => {
+        setParticipants(prev => {
+            const newParticipants = [...prev];
+            const [movedParticipant] = newParticipants.splice(fromIndex, 1);
+            newParticipants.splice(toIndex, 0, movedParticipant);
+            return newParticipants;
+        });
+    };
+
+    const shuffleParticipants = () => {
+        setParticipants(prev => [...prev].sort(() => Math.random() - 0.5));
+    };
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        { name: 'Tandas', url: route('tandas.index') },
+        { name: 'Duplicar Tanda', url: route('tandas.duplicate', originalTanda.id) },
+    ];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -422,4 +381,4 @@ export default function Duplicate({ originalTanda }: Props) {
             </div>
         </AppLayout>
     );
-} 
+}

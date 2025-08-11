@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+import { colorClasses } from '@/lib/colors';
 
 type ProfileForm = {
     name: string;
@@ -50,14 +51,14 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                     </div>
 
                     <form onSubmit={submit} className="space-y-6">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="text-lg">Información Personal</CardTitle>
-                                <CardDescription>
+                        <div className="rounded-lg bg-gradient-to-br from-indigo-50 to-violet-50 dark:from-indigo-950/20 dark:to-violet-950/20 border border-indigo-200 dark:border-indigo-700 p-4">
+                            <div className="mb-4">
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Información Personal</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
                                     Mantén tu información personal actualizada
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
+                                </p>
+                            </div>
+                            <div className="space-y-4">
                                 <div className="grid gap-3">
                                     <Label htmlFor="name" className="text-sm font-medium">
                                         Nombre Completo
@@ -90,12 +91,12 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                                     />
                                     <InputError className="mt-1" message={errors.email} />
                                 </div>
-                            </CardContent>
-                        </Card>
+                            </div>
+                        </div>
 
                         {mustVerifyEmail && auth.user.email_verified_at === null && (
-                            <Card className="border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950/20">
-                                <CardContent className="pt-6">
+                            <div className="rounded-lg bg-gradient-to-br from-yellow-50 to-amber-50 dark:from-yellow-950/20 dark:to-amber-950/20 border border-yellow-200 dark:border-yellow-700 p-4">
+                                <div className="pt-6">
                                     <div className="space-y-3">
                                         <p className="text-sm text-yellow-800 dark:text-yellow-200">
                                             Tu dirección de correo electrónico no está verificada.
@@ -110,20 +111,20 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                                         </Link>
 
                                         {status === 'verification-link-sent' && (
-                                            <div className="text-sm font-medium text-green-600 dark:text-green-400">
+                                            <div className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
                                                 Se ha enviado un nuevo enlace de verificación a tu correo electrónico.
                                             </div>
                                         )}
                                     </div>
-                                </CardContent>
-                            </Card>
+                                </div>
+                            </div>
                         )}
 
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             <Button 
                                 type="submit" 
                                 disabled={processing}
-                                className="w-full sm:w-auto"
+                                className={`w-full sm:w-auto ${colorClasses.button.primary}`}
                             >
                                 {processing ? 'Guardando...' : 'Guardar Cambios'}
                             </Button>
@@ -135,7 +136,7 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                                 leave="transition ease-in-out"
                                 leaveTo="opacity-0"
                             >
-                                <p className="text-sm text-green-600 dark:text-green-400 font-medium">
+                                <p className="text-sm text-emerald-600 dark:text-emerald-400 font-medium">
                                     ¡Cambios guardados exitosamente!
                                 </p>
                             </Transition>
