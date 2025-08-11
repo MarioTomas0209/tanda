@@ -139,3 +139,141 @@
         @apply bg-background text-foreground;
     }
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos personalizados para móvil */
+@layer components {
+    /* Mejoras para navegación móvil */
+    .mobile-nav-item {
+        @apply transition-all duration-200 ease-in-out;
+    }
+    
+    .mobile-nav-item:active {
+        @apply scale-95;
+    }
+    
+    /* Mejoras para botones en móvil */
+    .mobile-button {
+        @apply touch-manipulation;
+        @apply active:scale-95;
+        @apply transition-transform duration-100;
+    }
+    
+    /* Mejoras para tarjetas en móvil */
+    .mobile-card {
+        @apply touch-manipulation;
+        @apply active:scale-[0.98];
+        @apply transition-transform duration-100;
+    }
+    
+    /* Scroll suave para navegación móvil */
+    .mobile-smooth-scroll {
+        @apply scroll-smooth;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Mejoras para inputs en móvil */
+    .mobile-input {
+        @apply text-base;
+        @apply leading-relaxed;
+        @apply touch-manipulation;
+    }
+    
+    /* Mejoras para botones de acción flotantes */
+    .floating-action-button {
+        @apply shadow-lg;
+        @apply hover:shadow-xl;
+        @apply active:shadow-md;
+        @apply transition-all duration-200;
+    }
+    
+    /* Mejoras para navegación de configuración */
+    .settings-nav-item {
+        @apply transition-all duration-200;
+        @apply hover:bg-gray-50 dark:hover:bg-gray-800;
+        @apply active:bg-gray-100 dark:active:bg-gray-700;
+    }
+    
+    /* Mejoras para el dashboard móvil */
+    .mobile-dashboard-grid {
+        @apply grid-cols-1;
+        @apply gap-4;
+        @apply sm:grid-cols-2;
+        @apply lg:grid-cols-3;
+        @apply xl:grid-cols-4;
+    }
+    
+    /* Mejoras para tarjetas del dashboard */
+    .dashboard-card {
+        @apply transition-all duration-200;
+        @apply hover:shadow-lg;
+        @apply active:shadow-md;
+        @apply touch-manipulation;
+    }
+    
+    /* Mejoras para botones del dashboard */
+    .dashboard-button {
+        @apply transition-all duration-200;
+        @apply hover:scale-105;
+        @apply active:scale-95;
+        @apply touch-manipulation;
+    }
+}
+
+/* Estilos específicos para dispositivos móviles */
+@media (max-width: 768px) {
+    /* Ajustes de padding para móvil */
+    .mobile-padding {
+        @apply px-4 py-4;
+    }
+    
+    /* Ajustes de espaciado para móvil */
+    .mobile-spacing {
+        @apply space-y-4;
+    }
+    
+    /* Ajustes de grid para móvil */
+    .mobile-grid {
+        @apply grid-cols-1;
+        @apply gap-3;
+    }
+    
+    /* Ajustes de texto para móvil */
+    .mobile-text {
+        @apply text-sm;
+        @apply leading-relaxed;
+    }
+    
+    /* Ajustes de botones para móvil */
+    .mobile-button-full {
+        @apply w-full;
+        @apply h-12;
+        @apply text-base;
+    }
+}
+
+/* Estilos para modo oscuro en móvil */
+@media (prefers-color-scheme: dark) {
+    .mobile-dark-mode {
+        @apply bg-gray-900;
+        @apply text-gray-100;
+    }
+}
+
+/* Estilos para dispositivos con pantalla táctil */
+@media (hover: none) and (pointer: coarse) {
+    .touch-device {
+        @apply touch-manipulation;
+    }
+    
+    .touch-device .hover\:scale-105:hover {
+        @apply scale-100;
+    }
+    
+    .touch-device .hover\:shadow-lg:hover {
+        @apply shadow-md;
+    }
+}

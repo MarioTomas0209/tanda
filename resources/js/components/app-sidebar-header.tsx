@@ -1,14 +1,49 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
-import { SidebarTrigger } from '@/components/ui/sidebar';
-import { type BreadcrumbItem as BreadcrumbItemType } from '@/types';
+import { Button } from '@/components/ui/button';
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { type BreadcrumbItem } from '@/types';
+import { Menu, X } from 'lucide-react';
 
-export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: BreadcrumbItemType[] }) {
+interface AppSidebarHeaderProps {
+    breadcrumbs?: BreadcrumbItem[];
+}
+
+export function AppSidebarHeader({ breadcrumbs = [] }: AppSidebarHeaderProps) {
+    const { open, setOpen, openMobile, setOpenMobile, isMobile } = useSidebar();
+
+    const toggleSidebar = () => {
+        if (isMobile) {
+            setOpenMobile(!openMobile);
+        } else {
+            setOpen(!open);
+        }
+    };
+
     return (
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b border-sidebar-border/50 px-6 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:px-4">
-            <div className="flex items-center gap-2">
-                <SidebarTrigger className="-ml-1" />
+        <div className="flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4">
+            {isMobile && (
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    className="lg:hidden"
+                    onClick={toggleSidebar}
+                >
+                    {isMobile ? (openMobile ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />) : (open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />)}
+                </Button>
+            )}
+            
+            <div className="flex-1">
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
             </div>
-        </header>
+            
+            {isMobile && (
+                <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="sm" className="lg:hidden">
+                        <span className="sr-only">Menú</span>
+                    </Button>
+                </div>
+            )}
+        </div>
     );
 }

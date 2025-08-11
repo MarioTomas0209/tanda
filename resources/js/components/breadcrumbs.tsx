@@ -3,7 +3,12 @@ import { type BreadcrumbItem as BreadcrumbItemType } from '@/types';
 import { Link } from '@inertiajs/react';
 import { Fragment } from 'react';
 
-export function Breadcrumbs({ breadcrumbs }: { breadcrumbs: BreadcrumbItemType[] }) {
+export function Breadcrumbs({ breadcrumbs }: { breadcrumbs?: BreadcrumbItemType[] }) {
+    // Validar que breadcrumbs sea un array válido
+    if (!breadcrumbs || !Array.isArray(breadcrumbs)) {
+        return null;
+    }
+    
     return (
         <>
             {breadcrumbs.length > 0 && (
